@@ -1,0 +1,418 @@
+# ============================================================
+# DATA CLASSIFICATION
+# LGPD & Data Protection Pipeline
+# ============================================================
+
+dataset:
+  name: customers
+  domain: ecommerce
+  source_layer: raw_restricted
+
+  purpose:
+    description: >
+      Provide customer data for analytical processing focused on
+      purchasing behavior, aggregated customer profiles, marketing
+      analysis and commercial performance.
+
+  data_owner: ecommerce
+  contains_personal_data: true
+  contains_sensitive_personal_data: true
+
+
+# ============================================================
+# CLASSIFICATION LEVELS
+# ============================================================
+
+classification_levels:
+
+  non_personal_data:
+    description: >
+      Data that does not identify or relate to an identified or
+      identifiable natural person.
+
+  personal_data:
+    description: >
+      Information related to an identified or identifiable
+      natural person.
+
+  sensitive_personal_data:
+    description: >
+      Personal data classified as sensitive under LGPD,
+      requiring enhanced protection.
+
+
+# ============================================================
+# PROTECTION LEVELS
+# ============================================================
+
+protection_levels:
+
+  low:
+    description: Low impact if improperly exposed.
+
+  medium:
+    description: Moderate privacy impact if improperly exposed.
+
+  high:
+    description: High privacy or identification risk.
+
+  critical:
+    description: >
+      Sensitive personal data or information requiring
+      strict access restrictions.
+
+
+# ============================================================
+# COLUMNS
+# ============================================================
+
+columns:
+
+  customer_id:
+    classification: personal_data
+    identification: direct
+    protection_level: high
+
+    purpose:
+      required: true
+      description: >
+        Required to correlate customer activity across
+        analytical datasets.
+
+    protection:
+      action: pseudonymize
+      method: hmac_sha256
+
+
+  nome:
+    classification: personal_data
+    identification: direct
+    protection_level: high
+
+    purpose:
+      required: false
+      description: >
+        Customer name is not required for analytical purposes.
+
+    protection:
+      action: remove
+
+
+  cpf:
+    classification: personal_data
+    identification: direct
+    protection_level: high
+
+    purpose:
+      required: false
+      description: >
+        CPF is not required for the defined analytical purpose.
+
+    protection:
+      action: remove
+
+
+  email:
+    classification: personal_data
+    identification: direct
+    protection_level: high
+
+    purpose:
+      required: false
+      description: >
+        Email address is not required for analytical processing.
+
+    protection:
+      action: remove
+
+
+  telefone:
+    classification: personal_data
+    identification: direct
+    protection_level: high
+
+    purpose:
+      required: false
+      description: >
+        Phone number is not required for analytical processing.
+
+    protection:
+      action: remove
+
+
+  data_nascimento:
+    classification: personal_data
+    identification: indirect
+    protection_level: medium
+
+    purpose:
+      required: true
+      description: >
+        Customer age is useful for aggregated demographic analysis,
+        but the exact birth date is unnecessary.
+
+    protection:
+      action: generalize
+      method: age_range
+      output_column: faixa_etaria
+
+
+  sexo:
+    classification: personal_data
+    identification: indirect
+    protection_level: medium
+
+    purpose:
+      required: true
+      description: >
+        Used for aggregated customer profile analysis.
+
+    protection:
+      action: retain
+
+
+  raca_etnia:
+    classification: sensitive_personal_data
+    identification: indirect
+    protection_level: critical
+
+    purpose:
+      required: false
+      description: >
+        Race or ethnicity is not required for the defined
+        analytical purpose.
+
+    protection:
+      action: remove
+
+
+  cidade:
+    classification: personal_data
+    identification: indirect
+    protection_level: medium
+
+    purpose:
+      required: true
+      description: >
+        Used for geographical and commercial analysis.
+
+    protection:
+      action: retain
+
+
+  estado:
+    classification: personal_data
+    identification: indirect
+    protection_level: low
+
+    purpose:
+      required: true
+      description: >
+        Used for aggregated geographical analysis.
+
+    protection:
+      action: retain
+
+
+  cep:
+    classification: personal_data
+    identification: indirect
+    protection_level: high
+
+    purpose:
+      required: true
+      description: >
+        Geographic information is useful, but the complete postal
+        code provides unnecessary granularity.
+
+    protection:
+      action: generalize
+      method: cep_region
+      output_column: regiao_cep
+
+
+  profissao:
+    classification: personal_data
+    identification: indirect
+    protection_level: medium
+
+    purpose:
+      required: true
+      description: >
+        Used for aggregated customer profile analysis.
+
+    protection:
+      action: retain
+
+
+  renda_mensal:
+    classification: personal_data
+    identification: indirect
+    protection_level: high
+
+    purpose:
+      required: true
+      description: >
+        Income profile is useful for customer segmentation, but
+        the exact value is unnecessary.
+
+    protection:
+      action: generalize
+      method: income_range
+      output_column: faixa_renda
+
+
+  estado_civil:
+    classification: personal_data
+    identification: indirect
+    protection_level: medium
+
+    purpose:
+      required: true
+      description: >
+        Used for aggregated customer profile analysis.
+
+    protection:
+      action: retain
+
+
+  possui_filhos:
+    classification: personal_data
+    identification: indirect
+    protection_level: medium
+
+    purpose:
+      required: true
+      description: >
+        Used for aggregated customer profile analysis.
+
+    protection:
+      action: retain
+
+
+  condicao_saude:
+    classification: sensitive_personal_data
+    identification: indirect
+    protection_level: critical
+
+    purpose:
+      required: false
+      description: >
+        Health information has no purpose in the defined
+        ecommerce analytical use case.
+
+    protection:
+      action: remove
+
+
+  tipo_sanguineo:
+    classification: sensitive_personal_data
+    identification: indirect
+    protection_level: critical
+
+    purpose:
+      required: false
+      description: >
+        Blood type has no purpose in the defined ecommerce
+        analytical use case.
+
+    protection:
+      action: remove
+
+
+  consentimento_marketing:
+    classification: personal_data
+    identification: indirect
+    protection_level: medium
+
+    purpose:
+      required: true
+      description: >
+        Required for marketing eligibility and consent analysis.
+
+    protection:
+      action: retain
+
+
+  data_consentimento:
+    classification: personal_data
+    identification: indirect
+    protection_level: medium
+
+    purpose:
+      required: true
+      description: >
+        Required for consent traceability and governance.
+
+    protection:
+      action: retain
+
+
+  data_cadastro:
+    classification: personal_data
+    identification: indirect
+    protection_level: low
+
+    purpose:
+      required: true
+      description: >
+        Used for customer lifecycle and cohort analysis.
+
+    protection:
+      action: retain
+
+
+  ultima_compra:
+    classification: personal_data
+    identification: indirect
+    protection_level: medium
+
+    purpose:
+      required: true
+      description: >
+        Used for recency and purchasing behavior analysis.
+
+    protection:
+      action: retain
+
+
+  quantidade_compras:
+    classification: personal_data
+    identification: indirect
+    protection_level: medium
+
+    purpose:
+      required: true
+      description: >
+        Used for customer purchasing behavior analysis.
+
+    protection:
+      action: retain
+
+
+  valor_total_compras:
+    classification: personal_data
+    identification: indirect
+    protection_level: high
+
+    purpose:
+      required: true
+      description: >
+        Used for customer value and commercial performance analysis.
+
+    protection:
+      action: retain
+
+
+  canal_preferido:
+    classification: personal_data
+    identification: indirect
+    protection_level: low
+
+    purpose:
+      required: true
+      description: >
+        Used for aggregated communication channel analysis.
+
+    protection:
+      action: retain

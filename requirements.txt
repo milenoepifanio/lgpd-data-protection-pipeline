@@ -1,3 +1,5 @@
 Faker
 pandas
 pyarrow
+pyyaml
+python-dotenv
