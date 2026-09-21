@@ -1,0 +1,86 @@
+# Guia de Contribuição
+
+Obrigado por contribuir com o Projeto LGPD.
+
+Este projeto demonstra práticas de geração, classificação, proteção e validação de dados com foco na Lei Geral de Proteção de Dados. Contribuições devem preservar a clareza do código, a reprodutibilidade dos exemplos e a proteção das informações utilizadas.
+
+## Antes de começar
+
+- Leia o [código de conduta](code_of_conduct.md) e a [política de segurança](security.md).
+- Consulte a documentação existente em `docs/`.
+- Nunca adicione dados pessoais reais, credenciais, tokens ou arquivos `.env` ao repositório.
+- Utilize dados sintéticos ou dados devidamente anonimizados nos exemplos e testes.
+
+## Configuração local
+
+1. Clone o repositório e acesse a pasta do projeto.
+2. Crie e ative um ambiente virtual Python.
+3. Instale as dependências:
+
+```powershell
+pip install -r requirements.txt
+```
+
+4. Copie `.env.example` para `.env` somente quando necessário e preencha os valores localmente.
+
+## Fluxo de trabalho
+
+1. Crie uma branch específica para sua alteração:
+
+```powershell
+git checkout -b feature/minha-alteracao
+```
+
+2. Faça uma alteração pequena e relacionada a um único objetivo.
+3. Atualize a documentação quando o comportamento do projeto mudar.
+4. Execute os testes antes de abrir um pull request:
+
+```powershell
+pytest
+```
+
+5. Revise os arquivos modificados e confirme que nenhum dado sensível foi incluído.
+6. Abra um pull request descrevendo o problema, a solução e os testes executados.
+
+## Padrões de código
+
+- Siga o estilo já utilizado no projeto.
+- Prefira nomes de variáveis e funções claros.
+- Mantenha funções com responsabilidade única.
+- Evite duplicação de regras de classificação e proteção.
+- Preserve a reprodutibilidade dos dados sintéticos utilizando as configurações de seed existentes.
+- Adicione ou atualize testes para mudanças de comportamento.
+
+## Commits
+
+Use mensagens de commit objetivas e no imperativo. Sempre que possível, siga o formato:
+
+```text
+tipo: descrição curta
+```
+
+Exemplos:
+
+```text
+feat: adiciona validação da camada protegida
+fix: corrige classificação de dados sensíveis
+docs: atualiza regras de proteção
+test: adiciona cobertura para pseudonimização
+```
+
+## Pull requests
+
+O pull request deve:
+
+- explicar o objetivo da alteração;
+- informar os testes executados e seus resultados;
+- indicar alterações em documentação ou configuração;
+- manter o escopo concentrado;
+- não incluir arquivos temporários, saídas locais ou dados pessoais.
+
+Pull requests podem ser solicitados para revisão ou ajustes antes da integração. A aprovação considera correção, legibilidade, segurança, cobertura de testes e compatibilidade com a documentação do projeto.
+
+## Relato de problemas
+
+Use issues para bugs, dúvidas e propostas de melhoria. Vulnerabilidades de segurança devem ser relatadas de forma privada conforme a [política de segurança](security.md), e não em uma issue pública.
+

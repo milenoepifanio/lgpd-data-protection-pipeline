@@ -3,40 +3,33 @@
 
 ## 1. Visão Geral
 
-Este documento apresenta a arquitetura do case prático desenvolvido
-como parte do PDI de LGPD e Segurança aplicada à Engenharia de Dados.
+Este documento apresenta a arquitetura do case prático desenvolvido como parte do PDI de LGPD e Segurança aplicada à Engenharia de Dados.
 
-A solução utiliza dados sintéticos de clientes para demonstrar
-a identificação, classificação, proteção e disponibilização
-de dados em uma arquitetura organizada por camadas.
+A solução utiliza dados sintéticos de clientes de um e-commerce para demonstrar a classificação, proteção, preparação e disponibilização de dados em uma arquitetura organizada por camadas.
 
-O fluxo proposto é:
+O pipeline implementado segue o fluxo:
 
-Raw Restrita → Proteção → Silver → Analytics
+**Raw Restrita → Proteção → Protected → Silver → Analytics**
 
-A implementação atual contempla a geração dos dados, a camada Raw,
-o processamento de proteção, a camada Protected e sua validação.
-
-As camadas Silver e Analytics representam as próximas etapas
-de desenvolvimento.
+O projeto é executado localmente, utilizando Python e arquivos Parquet.
 
 ---
 
 ## 2. Objetivo do Case
 
-O objetivo é demonstrar como incorporar requisitos de privacidade
-e segurança ao ciclo de vida dos dados em um pipeline de
-Engenharia de Dados.
+O objetivo é demonstrar como incorporar requisitos de privacidade e segurança ao ciclo de vida dos dados em um pipeline de Engenharia de Dados.
 
-O case busca:
+O case contempla:
 
-- Identificar e classificar dados pessoais e sensíveis;
-- Aplicar minimização e mecanismos de proteção;
-- Separar dados originais de dados preparados para consumo;
-- Definir requisitos de controle de acesso;
-- Validar as transformações executadas;
-- Produzir informações analíticas compatíveis com a finalidade;
-- Documentar limitações e oportunidades de evolução.
+- Identificação e classificação de dados pessoais e sensíveis;
+- Definição de requisitos de proteção;
+- Aplicação de minimização, pseudonimização e generalização;
+- Validação automatizada das transformações;
+- Preparação dos dados para consumo analítico;
+- Geração de indicadores agregados;
+- Documentação de requisitos de controle de acesso, retenção e rastreabilidade.
+
+O dataset é sintético e foi gerado exclusivamente para fins de estudo.
 
 ---
 
@@ -44,25 +37,20 @@ O case busca:
 
 O cenário considera uma empresa fictícia de e-commerce.
 
-A finalidade analítica proposta é produzir indicadores comerciais
-agregados para compreender características gerais da base de
-clientes e seu comportamento de compra.
+A finalidade analítica é produzir indicadores comerciais agregados para compreender características gerais da base de clientes e seu comportamento de compra.
 
-Entre os possíveis indicadores estão:
+Os indicadores disponibilizados incluem:
 
 - Quantidade de clientes;
 - Receita total;
+- Quantidade de compras;
 - Ticket médio;
-- Frequência de compra;
+- Distribuição por estado;
 - Distribuição por faixa etária;
 - Distribuição por faixa de renda;
-- Indicadores por região.
+- Distribuição por canal preferido.
 
-A seleção final dos indicadores dependerá dos atributos
-disponíveis no dataset e do contrato definido para a Silver.
-
-A camada Analytics deve evitar a disponibilização de
-identificadores individuais desnecessários.
+A camada Analytics não disponibiliza identificadores individuais de clientes.
 
 ---
 
@@ -70,24 +58,22 @@ identificadores individuais desnecessários.
 
 ```mermaid
 flowchart TD
-    A["Geração de dados sintéticos<br/>Python"] --> B["Raw Restrita<br/>customers.parquet"]
+    A["Geração de dados sintéticos<br/>Python"] --> B["Raw Restrita<br/>data/raw/customers.parquet"]
 
     B --> C["Processo de Proteção<br/>Política YAML + HMAC-SHA256"]
 
-    C --> D["Protected<br/>customers.parquet"]
+    C --> D["Protected<br/>data/protected/customers.parquet"]
 
-    D --> E["Silver<br/>Tratamento e padronização"]
+    D --> E["Silver<br/>data/silver/customers.parquet"]
 
-    E --> F["Analytics<br/>Indicadores agregados"]
+    E --> F["Analytics<br/>Quatro produtos agregados"]
 
-    G["Validação<br/>Comparação + Great Expectations"] -.-> D
+    G["Validação da Proteção<br/>Comparação + Great Expectations"] -.-> D
 ```
 
-A camada Protected é uma saída intermediária explícita do
-processo de proteção.
+A camada Protected é uma saída intermediária explícita do processo de proteção.
 
-Ela permanece separada da Silver para distinguir as
-transformações de privacidade das transformações analíticas.
+Sua separação da Silver permite distinguir as transformações de privacidade das transformações de preparação analítica.
 
 ---
 
@@ -101,8 +87,7 @@ transformações de privacidade das transformações analíticas.
 
 `data/raw/customers.parquet`
 
-A Raw armazena os registros sintéticos originais, antes da
-aplicação das regras de proteção.
+A Raw armazena os registros sintéticos originais, antes da aplicação das regras de proteção.
 
 Características:
 
@@ -110,14 +95,11 @@ Características:
 - 24 colunas;
 - Identificadores diretos;
 - Atributos pessoais sensíveis;
-- Dados necessários para demonstrar o processo de proteção.
+- Dados utilizados para demonstrar o processo de proteção.
 
-O acesso à Raw deve ser restrito conforme a matriz de
-permissões proposta.
+A denominação "Restrita" representa a classificação e o requisito de acesso da camada.
 
-A denominação "Restrita" representa a classificação e o
-requisito de acesso da camada. Ela não significa que permissões
-efetivas tenham sido aplicadas ao diretório local.
+O projeto não implementa permissões específicas de armazenamento que impeçam o acesso direto aos arquivos por usuários que já possuam acesso ao diretório local.
 
 ### 5.2 Processo de Proteção
 
@@ -131,7 +113,7 @@ As ações incluem:
 
 - Remoção de atributos;
 - Pseudonimização com HMAC-SHA256;
-- Generalização;
+- Generalização de atributos;
 - Preservação de campos necessários.
 
 O processamento é executado por:
@@ -150,8 +132,7 @@ As regras são detalhadas em:
 
 `data/protected/customers.parquet`
 
-A Protected contém o resultado da aplicação das regras
-de proteção.
+A Protected contém o resultado da aplicação das regras de proteção.
 
 Características:
 
@@ -163,47 +144,66 @@ Características:
 
 A Protected não deve ser considerada anônima.
 
-Ela permanece sujeita aos requisitos de proteção aplicáveis
-aos dados pessoais pseudonimizados.
+Ela permanece sujeita aos requisitos de proteção aplicáveis aos dados pessoais pseudonimizados.
 
 ### 5.4 Silver
 
-**Status:** Planejada.
+**Status:** Implementada.
 
-**Local previsto:**
+**Local:**
 
 `data/silver/customers.parquet`
 
-A Silver será responsável por preparar os dados protegidos
-para as finalidades analíticas definidas.
+A Silver prepara os dados protegidos para a finalidade analítica do case.
 
-As transformações previstas incluem:
+Características:
 
+- 10.000 registros;
+- 12 colunas;
 - Seleção dos atributos necessários;
-- Padronização de tipos;
-- Validação de domínios;
-- Tratamento de inconsistências;
-- Criação de atributos derivados.
+- Conversão de datas;
+- Validação de regras de consistência;
+- Cálculo do ticket médio por cliente.
 
-O contrato de dados e as regras finais da Silver deverão ser
-definidos antes da implementação.
+A Silver mantém o `customer_id` pseudonimizado para uso interno.
+
+As regras são detalhadas em:
+
+`docs/silver-rules.md`
 
 ### 5.5 Analytics
 
-**Status:** Planejada.
+**Status:** Implementada.
 
-A Analytics será responsável pela disponibilização dos
-produtos analíticos do case.
+**Local:**
 
-As saídas previstas incluem indicadores comerciais agregados,
-sem exposição desnecessária de identificadores individuais.
+`data/analytics/`
 
-A definição dos agrupamentos deverá considerar o risco de
-identificação indireta, especialmente em grupos com poucos
-registros.
+A Analytics disponibiliza produtos analíticos agregados, sem expor o identificador individual dos clientes.
 
-A agregação não deve ser apresentada automaticamente como
-anonimização irreversível.
+Os quatro produtos implementados são:
+
+| Produto | Dimensão | Grupos gerados |
+|---|---|---:|
+| `customers_by_state.parquet` | Estado | 27 |
+| `customers_by_age.parquet` | Faixa etária | 6 |
+| `customers_by_income.parquet` | Faixa de renda | 5 |
+| `customers_by_channel.parquet` | Canal preferido | 4 |
+
+Cada produto contém:
+
+- Quantidade de clientes distintos;
+- Receita total;
+- Quantidade de compras;
+- Ticket médio agregado.
+
+Foi implementada uma regra de divulgação que exclui grupos com menos de 10 clientes.
+
+Essa regra reduz a exposição de grupos pequenos, mas não garante anonimização irreversível.
+
+As regras são detalhadas em:
+
+`docs/analytics-rules.md`
 
 ---
 
@@ -211,8 +211,7 @@ anonimização irreversível.
 
 ### 6.1 Geração
 
-O script `src/generate_data.py` produz o dataset sintético
-utilizado no case.
+O script `src/generate_data.py` produz o dataset sintético utilizado no case.
 
 A saída é armazenada na Raw.
 
@@ -226,24 +225,25 @@ A política estabelece o tratamento esperado para cada atributo.
 
 ### 6.3 Proteção
 
-O script `src/protect_data.py` aplica as transformações
-configuradas e gera a Protected.
+O script `src/protect_data.py` aplica as transformações configuradas e gera a Protected.
 
-### 6.4 Validação
+### 6.4 Validação da Proteção
 
-O script `src/validate_protection.py` verifica a conformidade
-da Protected com as regras implementadas.
+O script `src/validate_protection.py` verifica a conformidade da Protected com as regras implementadas.
 
-A validação combina comparação entre datasets e expectativas
-de qualidade com Great Expectations.
+A validação combina comparação entre datasets e expectativas de qualidade com Great Expectations.
 
 ### 6.5 Preparação Analítica
 
-Etapa planejada para a construção da Silver.
+O script `src/build_silver.py` lê a Protected, seleciona os atributos necessários, padroniza as datas, valida os dados e calcula o ticket médio.
+
+A saída é armazenada na Silver.
 
 ### 6.6 Disponibilização Analítica
 
-Etapa planejada para a construção da Analytics.
+O script `src/build_analytics.py` lê a Silver e produz quatro tabelas agregadas.
+
+As saídas são armazenadas na Analytics.
 
 ---
 
@@ -251,7 +251,7 @@ Etapa planejada para a construção da Analytics.
 
 | Tecnologia | Utilização |
 |---|---|
-| Python | Geração, proteção e validação dos dados. |
+| Python | Geração, proteção, validação e processamento dos dados. |
 | Pandas | Manipulação e transformação dos datasets. |
 | Parquet | Armazenamento das camadas de dados. |
 | PyYAML | Leitura da política de classificação. |
@@ -262,8 +262,7 @@ Etapa planejada para a construção da Analytics.
 
 O case utiliza processamento local.
 
-A adoção de serviços de nuvem, controle de acesso gerenciado
-e orquestração não faz parte da implementação atual.
+Serviços de nuvem, orquestração e controle de acesso gerenciado não fazem parte da implementação atual.
 
 ---
 
@@ -271,7 +270,7 @@ e orquestração não faz parte da implementação atual.
 
 ### 8.1 Classificação e Minimização
 
-A classificação é definida no documento:
+A classificação é definida em:
 
 `docs/data-classification.md`
 
@@ -279,8 +278,9 @@ A política técnica é mantida em:
 
 `config/data_classification.yaml`
 
-A minimização ocorre inicialmente no processo Raw → Protected
-e deverá ser reavaliada nas camadas posteriores.
+A minimização ocorre no processo Raw → Protected e novamente na preparação da Silver.
+
+Na Analytics, são disponibilizados apenas os atributos de agrupamento e os indicadores necessários à finalidade analítica.
 
 ### 8.2 Controle de Acesso
 
@@ -288,52 +288,56 @@ A matriz de acesso por profissão está documentada em:
 
 `docs/security/access_control.md`
 
-Ela contempla Engenharia de Dados, Administração de Banco de
-Dados, Ciência de Dados e Análise de Negócios.
+Ela contempla:
+
+- Engenharia de Dados;
+- Administração de Banco de Dados;
+- Ciência de Dados;
+- Análise de Negócios.
 
 As permissões representam uma proposta para a arquitetura.
 
-O armazenamento local não possui, até esta etapa, um mecanismo
-de autorização implementado especificamente pelo projeto.
+O armazenamento local não possui um mecanismo de autorização implementado especificamente pelo projeto.
 
 ### 8.3 Gerenciamento de Segredos
 
-A chave utilizada na pseudonimização é fornecida por
-configuração de ambiente.
+A chave utilizada na pseudonimização é fornecida por configuração de ambiente.
 
-Ela não deve ser incorporada ao código-fonte nem versionada
-no repositório.
+Ela não deve ser incorporada ao código-fonte nem versionada no repositório.
 
-Uma implantação corporativa deverá considerar um mecanismo
-apropriado de gerenciamento de segredos.
+Uma implantação corporativa deverá considerar um mecanismo apropriado de gerenciamento de segredos.
 
 ### 8.4 Rastreabilidade
 
-A validação do pipeline produz evidências da execução das
-regras de proteção.
+A execução dos scripts e das validações produz evidências técnicas do processamento.
 
 Isso não equivale a uma trilha completa de auditoria de acesso.
 
-Em produção, devem ser considerados registros de identidade,
-recurso, operação, horário e resultado do acesso.
+Em produção, devem ser considerados registros de identidade, recurso, operação, horário e resultado do acesso.
 
 ### 8.5 Retenção e Descarte
 
 A retenção deve considerar a finalidade de cada camada.
 
-O case documenta diretrizes de conservação e descarte, mas
-não implementa políticas automatizadas de ciclo de vida.
+O case documenta diretrizes de conservação e descarte, mas não implementa políticas automatizadas de ciclo de vida.
 
-Prazos e procedimentos operacionais devem ser definidos
-conforme os requisitos de uma eventual implantação.
+Prazos e procedimentos operacionais devem ser definidos conforme os requisitos de uma eventual implantação.
+
+### 8.6 Divulgação de Indicadores
+
+A Analytics aplica um limite mínimo de 10 clientes por grupo.
+
+Grupos abaixo desse limite não são publicados.
+
+A regra não deve ser interpretada como garantia de anonimização, especialmente quando os resultados puderem ser combinados com outras fontes.
 
 ---
 
 ## 9. Qualidade e Validação
 
-A validação implementada verifica a transformação Raw → Protected.
+### 9.1 Protected
 
-São avaliados:
+A validação verifica:
 
 - Quantidade de registros;
 - Esquema esperado;
@@ -342,16 +346,33 @@ São avaliados:
 - Resultado das transformações;
 - Regras de qualidade configuradas.
 
-A última execução registrada concluiu com sucesso:
+A execução registrada concluiu com sucesso:
 
 ```text
 GREAT EXPECTATIONS VALIDATION SUCCESSFUL
 PROTECTION VALIDATION SUCCESSFUL
 ```
 
-Essas validações demonstram conformidade com as regras
-implementadas, mas não comprovam anonimização irreversível
-nem a efetividade de controles de acesso ao armazenamento.
+### 9.2 Silver
+
+O processamento verifica:
+
+- Presença das colunas obrigatórias;
+- Ausência de identificadores nulos;
+- Unicidade do identificador;
+- Ausência de valores nulos nas métricas comerciais;
+- Ausência de valores negativos nas métricas comerciais;
+- Conversão das colunas de data.
+
+A execução registrada produziu 10.000 registros e 12 colunas.
+
+### 9.3 Analytics
+
+O processamento verifica o esquema de entrada e os atributos utilizados nas agregações.
+
+Os quatro produtos foram gerados e lidos com sucesso.
+
+As saídas não incluem o identificador individual de cliente.
 
 ---
 
@@ -365,70 +386,41 @@ nem a efetividade de controles de acesso ao armazenamento.
 | Processo de proteção | Implementado |
 | Protected | Implementada |
 | Validação da proteção | Implementada |
+| Silver | Implementada |
+| Analytics | Implementada |
 | Matriz de acesso | Documentada |
 | Controle efetivo de acesso ao armazenamento | Não implementado |
-| Silver | Planejada |
-| Analytics | Planejada |
 | Retenção e descarte automatizados | Não implementados |
+| Auditoria completa de acesso | Não implementada |
 
 ---
 
-## 11. Próximas Etapas
-
-### 11.1 Construção da Silver
-
-Definir o contrato de dados, as regras de transformação e
-os atributos necessários para a finalidade analítica.
-
-Implementar a leitura da Protected e a geração da Silver.
-
-### 11.2 Construção da Analytics
-
-Definir os indicadores comerciais e produzir tabelas
-agregadas a partir da Silver.
-
-Avaliar a necessidade de restringir agrupamentos com
-poucos registros.
-
-### 11.3 Consolidação do Case
-
-Atualizar a documentação com:
-
-- Esquemas finais das camadas;
-- Regras de transformação;
-- Resultados de execução;
-- Evidências de validação;
-- Limitações;
-- Diagrama final da arquitetura.
-
----
-
-## 12. Limitações
+## 11. Limitações
 
 O projeto utiliza dados sintéticos e processamento local.
 
-A aplicação de mecanismos de proteção demonstra conceitos
-de LGPD e Segurança aplicada à Engenharia de Dados, mas não
-substitui uma avaliação de risco de privacidade para dados reais.
+A aplicação de mecanismos de proteção demonstra conceitos de LGPD e Segurança aplicada à Engenharia de Dados, mas não substitui uma avaliação de risco de privacidade para dados reais.
 
-A arquitetura documenta controles de acesso, rastreabilidade
-e retenção que ainda não estão integralmente implementados.
+A arquitetura documenta controles de acesso, rastreabilidade e retenção que não estão integralmente implementados.
 
-A Protected contém dados pseudonimizados e não deve ser
-classificada como anônima.
+A Protected e a Silver contêm dados pseudonimizados e não devem ser classificadas como anônimas.
 
-As camadas Silver e Analytics permanecem planejadas até
-a conclusão de suas implementações.
+A Analytics contém dados agregados e aplica uma regra mínima de grupo, mas não foi demonstrada anonimização irreversível.
 
 ---
 
-## 13. Referências Internas
+## 12. Referências Internas
 
 - `config/data_classification.yaml`
 - `src/generate_data.py`
 - `src/classify_data.py`
 - `src/protect_data.py`
 - `src/validate_protection.py`
+- `src/build_silver.py`
+- `src/build_analytics.py`
 - `docs/data-classification.md`
 - `docs/protection-rules.md`
+- `docs/silver-rules.md`
+- `docs/analytics-rules.md`
 - `docs/security/access_control.md`
+- `docs/pdi-evidence.md`
