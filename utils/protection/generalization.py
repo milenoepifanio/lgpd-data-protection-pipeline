@@ -12,9 +12,7 @@ from typing import Optional
 import pandas as pd
 
 
-# ============================================================
 # AGE RANGE
-# ============================================================
 
 def generalize_age(
     birth_date: object,
@@ -58,9 +56,7 @@ def generalize_age(
     return "65+"
 
 
-# ============================================================
 # CEP REGION
-# ============================================================
 
 def generalize_cep(
     cep: object,
@@ -83,9 +79,7 @@ def generalize_cep(
     return normalized_cep[:5]
 
 
-# ============================================================
 # INCOME RANGE
-# ============================================================
 
 def generalize_income(
     income: object,

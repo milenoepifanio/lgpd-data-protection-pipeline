@@ -15,9 +15,7 @@ from utils.analytics.definitions import (
 )
 
 
-# ============================================================
 # INPUT SCHEMA VALIDATION
-# ============================================================
 
 def validate_input_schema(
     dataframe: pd.DataFrame,
@@ -39,9 +37,7 @@ def validate_input_schema(
         )
 
 
-# ============================================================
 # ANALYTICAL DATA VALIDATION
-# ============================================================
 
 def validate_analytics_data(
     dataframe: pd.DataFrame,

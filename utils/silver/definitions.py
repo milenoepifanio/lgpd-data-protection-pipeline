@@ -6,9 +6,7 @@ Silver Layer Definitions
 Defines the expected schema for the Silver layer.
 """
 
-# ============================================================
 # REQUIRED INPUT COLUMNS
-# ============================================================
 
 SILVER_COLUMNS = [
     "customer_id",
@@ -25,9 +23,7 @@ SILVER_COLUMNS = [
 ]
 
 
-# ============================================================
 # DATE COLUMNS
-# ============================================================
 
 DATE_COLUMNS = [
     "data_consentimento",
@@ -36,18 +32,14 @@ DATE_COLUMNS = [
 ]
 
 
-# ============================================================
 # DERIVED COLUMNS
-# ============================================================
 
 DERIVED_COLUMNS = [
     "ticket_medio",
 ]
 
 
-# ============================================================
 # OUTPUT SCHEMA
-# ============================================================
 
 SILVER_OUTPUT_COLUMNS = (
     SILVER_COLUMNS + DERIVED_COLUMNS

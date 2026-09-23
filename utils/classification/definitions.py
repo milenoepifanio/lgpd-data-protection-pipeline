@@ -8,9 +8,7 @@ LGPD Data Protection Pipeline.
 """
 
 
-# ============================================================
 # DATA CLASSIFICATIONS
-# ============================================================
 
 VALID_CLASSIFICATIONS = {
     "non_personal_data",
@@ -19,9 +17,7 @@ VALID_CLASSIFICATIONS = {
 }
 
 
-# ============================================================
 # IDENTIFICATION TYPES
-# ============================================================
 
 VALID_IDENTIFICATION_TYPES = {
     "direct",
@@ -30,9 +26,7 @@ VALID_IDENTIFICATION_TYPES = {
 }
 
 
-# ============================================================
 # PROTECTION LEVELS
-# ============================================================
 
 VALID_PROTECTION_LEVELS = {
     "low",
@@ -42,9 +36,7 @@ VALID_PROTECTION_LEVELS = {
 }
 
 
-# ============================================================
 # PROTECTION ACTIONS
-# ============================================================
 
 VALID_PROTECTION_ACTIONS = {
     "retain",

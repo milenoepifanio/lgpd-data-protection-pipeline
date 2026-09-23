@@ -20,9 +20,7 @@ from utils.analytics.validator import (
 )
 
 
-# ============================================================
 # AGGREGATION
-# ============================================================
 
 def aggregate_customers(
     dataframe: pd.DataFrame,
@@ -55,18 +53,14 @@ def aggregate_customers(
         )
     )
 
-    # ========================================================
     # MINIMUM GROUP SIZE
-    # ========================================================
 
     aggregated = aggregated.loc[
         aggregated["quantidade_clientes"]
         >= MIN_GROUP_SIZE
     ].copy()
 
-    # ========================================================
     # WEIGHTED AVERAGE ORDER VALUE
-    # ========================================================
 
     aggregated["ticket_medio"] = 0.0
 
@@ -89,9 +83,7 @@ def aggregate_customers(
         ]
     )
 
-    # ========================================================
     # OUTPUT SCHEMA
-    # ========================================================
 
     output_columns = [
         dimension,
@@ -109,9 +101,7 @@ def aggregate_customers(
     )
 
 
-# ============================================================
 # ANALYTICAL PRODUCTS
-# ============================================================
 
 def build_analytics(
     silver_dataframe: pd.DataFrame,

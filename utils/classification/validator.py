@@ -17,10 +17,7 @@ from utils.classification.definitions import (
     VALID_PROTECTION_LEVELS,
 )
 
-
-# ============================================================
 # COLUMN COVERAGE
-# ============================================================
 
 def validate_column_coverage(
     dataframe: pd.DataFrame,
@@ -60,9 +57,7 @@ def validate_column_coverage(
     return errors
 
 
-# ============================================================
 # CLASSIFICATION RULES
-# ============================================================
 
 def validate_classification_rules(
     config: dict[str, Any],
@@ -104,19 +99,11 @@ def validate_classification_rules(
             "action"
         )
 
-        # ----------------------------------------------------
-        # Classification
-        # ----------------------------------------------------
-
         if classification not in VALID_CLASSIFICATIONS:
             errors.append(
                 f"Column '{column}' has invalid classification: "
                 f"'{classification}'."
             )
-
-        # ----------------------------------------------------
-        # Identification
-        # ----------------------------------------------------
 
         if identification not in VALID_IDENTIFICATION_TYPES:
             errors.append(
@@ -124,19 +111,11 @@ def validate_classification_rules(
                 f"type: '{identification}'."
             )
 
-        # ----------------------------------------------------
-        # Protection level
-        # ----------------------------------------------------
-
         if protection_level not in VALID_PROTECTION_LEVELS:
             errors.append(
                 f"Column '{column}' has invalid protection "
                 f"level: '{protection_level}'."
             )
-
-        # ----------------------------------------------------
-        # Purpose
-        # ----------------------------------------------------
 
         if "required" not in purpose:
             errors.append(
@@ -153,19 +132,11 @@ def validate_classification_rules(
                 "'purpose.required'. Expected boolean."
             )
 
-        # ----------------------------------------------------
-        # Protection action
-        # ----------------------------------------------------
-
         if action not in VALID_PROTECTION_ACTIONS:
             errors.append(
                 f"Column '{column}' has invalid protection "
                 f"action: '{action}'."
             )
-
-        # ----------------------------------------------------
-        # Generalization
-        # ----------------------------------------------------
 
         if action == "generalize":
 
@@ -181,9 +152,6 @@ def validate_classification_rules(
                     "but does not define an output column."
                 )
 
-        # ----------------------------------------------------
-        # Pseudonymization
-        # ----------------------------------------------------
 
         if (
             action == "pseudonymize"
@@ -197,9 +165,7 @@ def validate_classification_rules(
     return errors
 
 
-# ============================================================
 # COMPLETE VALIDATION
-# ============================================================
 
 def validate_classification(
     dataframe: pd.DataFrame,

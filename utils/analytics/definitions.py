@@ -6,9 +6,7 @@ Analytics Layer Definitions
 Defines the analytical products and disclosure requirements.
 """
 
-# ============================================================
 # ANALYTICAL PRODUCTS
-# ============================================================
 
 ANALYTICS_PRODUCTS = {
     "customers_by_state": "estado",
@@ -18,9 +16,7 @@ ANALYTICS_PRODUCTS = {
 }
 
 
-# ============================================================
 # REQUIRED SILVER COLUMNS
-# ============================================================
 
 REQUIRED_COLUMNS = [
     "customer_id",
@@ -33,16 +29,12 @@ REQUIRED_COLUMNS = [
 ]
 
 
-# ============================================================
 # DISCLOSURE POLICY
-# ============================================================
 
 MIN_GROUP_SIZE = 10
 
 
-# ============================================================
 # ANALYTICAL METRICS
-# ============================================================
 
 METRIC_COLUMNS = [
     "quantidade_clientes",

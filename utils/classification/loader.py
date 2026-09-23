@@ -13,9 +13,7 @@ import pandas as pd
 import yaml
 
 
-# ============================================================
 # CLASSIFICATION CONFIG
-# ============================================================
 
 def load_classification_config(
     config_path: Path,
@@ -54,9 +52,7 @@ def load_classification_config(
     return config
 
 
-# ============================================================
 # DATASET
-# ============================================================
 
 def load_dataset(
     dataset_path: Path,

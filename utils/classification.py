@@ -13,9 +13,7 @@ import pandas as pd
 import yaml
 
 
-# ============================================================
 # CONSTANTS
-# ============================================================
 
 VALID_CLASSIFICATIONS = {
     "non_personal_data",
@@ -45,9 +43,7 @@ VALID_PROTECTION_ACTIONS = {
 }
 
 
-# ============================================================
 # LOAD CLASSIFICATION CONFIG
-# ============================================================
 
 def load_classification_config(
     config_path: Path,
@@ -100,9 +96,7 @@ def load_classification_config(
     return config
 
 
-# ============================================================
 # LOAD DATASET SCHEMA
-# ============================================================
 
 def load_dataset(
     dataset_path: Path,
@@ -126,9 +120,7 @@ def load_dataset(
     return pd.read_parquet(dataset_path)
 
 
-# ============================================================
 # COLUMN COVERAGE VALIDATION
-# ============================================================
 
 def validate_column_coverage(
     dataframe: pd.DataFrame,
@@ -170,9 +162,7 @@ def validate_column_coverage(
     return errors
 
 
-# ============================================================
 # CLASSIFICATION RULE VALIDATION
-# ============================================================
 
 def validate_classification_rules(
     config: dict[str, Any],
@@ -312,9 +302,7 @@ def validate_classification_rules(
     return errors
 
 
-# ============================================================
 # CLASSIFICATION SUMMARY
-# ============================================================
 
 def build_classification_summary(
     config: dict[str, Any],
@@ -370,9 +358,7 @@ def build_classification_summary(
     return pd.DataFrame(records)
 
 
-# ============================================================
 # VALIDATION
-# ============================================================
 
 def validate_classification(
     dataframe: pd.DataFrame,

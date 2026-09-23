@@ -11,9 +11,7 @@ import pandas as pd
 from utils.silver.definitions import SILVER_COLUMNS
 
 
-# ============================================================
 # INPUT SCHEMA VALIDATION
-# ============================================================
 
 def validate_input_schema(
     dataframe: pd.DataFrame,
@@ -35,9 +33,7 @@ def validate_input_schema(
         )
 
 
-# ============================================================
 # BUSINESS RULES VALIDATION
-# ============================================================
 
 def validate_business_rules(
     dataframe: pd.DataFrame,

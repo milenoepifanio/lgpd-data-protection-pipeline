@@ -26,10 +26,7 @@ from utils.protection.pseudonymization import (
     hmac_sha256,
 )
 
-
-# ============================================================
 # GENERALIZATION METHODS
-# ============================================================
 
 GENERALIZATION_METHODS = {
     "age_range": generalize_age,
@@ -37,10 +34,7 @@ GENERALIZATION_METHODS = {
     "income_range": generalize_income,
 }
 
-
-# ============================================================
 # EXPECTED OUTPUT SCHEMA
-# ============================================================
 
 def build_protected_schema(
     config: dict[str, Any],
@@ -70,16 +64,14 @@ def build_protected_schema(
 
         action = protection.get("action")
 
-        # ----------------------------------------------------
         # REMOVE
-        # ----------------------------------------------------
 
         if action == "remove":
             continue
 
-        # ----------------------------------------------------
+
         # GENERALIZE
-        # ----------------------------------------------------
+
 
         if action == "generalize":
 
@@ -89,9 +81,9 @@ def build_protected_schema(
 
             continue
 
-        # ----------------------------------------------------
+
         # RETAIN / PSEUDONYMIZE
-        # ----------------------------------------------------
+
 
         if action in {
             "retain",
@@ -102,9 +94,9 @@ def build_protected_schema(
 
             continue
 
-        # ----------------------------------------------------
+
         # UNKNOWN ACTION
-        # ----------------------------------------------------
+
 
         raise ValueError(
             f"Unsupported protection action "
@@ -114,9 +106,7 @@ def build_protected_schema(
     return protected_columns
 
 
-# ============================================================
 # DATA PROTECTION
-# ============================================================
 
 def protect_dataset(
     dataframe: pd.DataFrame,
@@ -151,16 +141,12 @@ def protect_dataset(
 
         action = protection.get("action")
 
-        # ----------------------------------------------------
         # RETAIN
-        # ----------------------------------------------------
 
         if action == "retain":
             continue
 
-        # ----------------------------------------------------
         # REMOVE
-        # ----------------------------------------------------
 
         if action == "remove":
 
@@ -171,9 +157,7 @@ def protect_dataset(
 
             continue
 
-        # ----------------------------------------------------
         # PSEUDONYMIZE
-        # ----------------------------------------------------
 
         if action == "pseudonymize":
 
@@ -197,9 +181,7 @@ def protect_dataset(
 
             continue
 
-        # ----------------------------------------------------
         # GENERALIZE
-        # ----------------------------------------------------
 
         if action == "generalize":
 
@@ -233,18 +215,16 @@ def protect_dataset(
 
             continue
 
-        # ----------------------------------------------------
+
         # UNKNOWN ACTION
-        # ----------------------------------------------------
+
 
         raise ValueError(
             f"Unsupported protection action "
             f"'{action}' for column '{column}'."
         )
 
-    # ========================================================
     # OUTPUT SCHEMA ORDER
-    # ========================================================
 
     expected_columns = build_protected_schema(
         config=config,

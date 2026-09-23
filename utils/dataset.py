@@ -6,9 +6,7 @@ from utils.config import NUM_RECORDS
 from utils.generators import generate_customer
 
 
-# ============================================================
 # DATASET GENERATION
-# ============================================================
 
 def generate_dataset(
     num_records: int = NUM_RECORDS,
@@ -36,9 +34,7 @@ def generate_dataset(
     return pd.DataFrame(customers)
 
 
-# ============================================================
 # DATASET PERSISTENCE
-# ============================================================
 
 def save_dataset(
     dataframe: pd.DataFrame,

@@ -20,9 +20,7 @@ from utils.silver.validator import (
 )
 
 
-# ============================================================
 # DATE STANDARDIZATION
-# ============================================================
 
 def standardize_dates(
     dataframe: pd.DataFrame,
@@ -43,9 +41,7 @@ def standardize_dates(
     return dataframe
 
 
-# ============================================================
 # DERIVED ATTRIBUTES
-# ============================================================
 
 def derive_analytics_attributes(
     dataframe: pd.DataFrame,
@@ -78,9 +74,7 @@ def derive_analytics_attributes(
     return dataframe
 
 
-# ============================================================
 # SILVER TRANSFORMATION
-# ============================================================
 
 def build_silver(
     protected_dataframe: pd.DataFrame,
