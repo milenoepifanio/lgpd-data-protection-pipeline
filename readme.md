@@ -25,6 +25,7 @@ Nenhum dado pessoal real é necessário para executar o projeto.
 config/       Política de classificação e proteção
 data/raw/     Dataset sintético original
 data/protected/ Dataset com as proteções aplicadas
+data/restricted/ Mapa restrito entre IDs originais e protegidos
 data/silver/  Dataset preparado para análise
 data/analytics/ Produtos analíticos agregados
 docs/         Arquitetura e regras das camadas
@@ -103,6 +104,8 @@ python -m src.protect_data
 Saída: `data/protected/customers.parquet`.
 
 As transformações podem incluir remoção de atributos, generalização e pseudonimização. A camada Protected ainda pode conter dados pessoais pseudonimizados e não deve ser tratada como anonimizada.
+
+Durante esta etapa também é gerado `data/restricted/customer_identity_map.parquet`, contendo os atributos originais do cliente, incluindo nome, contato e dados sensíveis como `raca_etnia`, `condicao_saude` e `tipo_sanguineo`, além do campo `customer_id_protected` usado para relacioná-los às camadas Protected e Silver. Esse arquivo é necessário para rastreabilidade operacional, deve permanecer sob controle de acesso restrito e não deve ser compartilhado com consumidores da camada Protected.
 
 ### 4. Validar a proteção
 

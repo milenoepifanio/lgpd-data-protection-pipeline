@@ -33,6 +33,7 @@ from utils.classification.validator import (
 from utils.config import (
     CLASSIFICATION_CONFIG_PATH,
     PROTECTED_CUSTOMERS_PATH,
+    RESTRICTED_CUSTOMER_IDENTITY_PATH,
     RAW_CUSTOMERS_PATH,
 )
 from utils.dataset import (
@@ -41,6 +42,9 @@ from utils.dataset import (
 )
 from utils.protection.processor import (
     protect_dataset,
+)
+from utils.protection.restricted import (
+    build_restricted_tracking,
 )
 
 
@@ -52,6 +56,9 @@ PROCESS_NAME = "LGPD DATA PROTECTION PIPELINE"
 RAW_PATH = Path(RAW_CUSTOMERS_PATH)
 CONFIG_PATH = Path(CLASSIFICATION_CONFIG_PATH)
 PROTECTED_PATH = Path(PROTECTED_CUSTOMERS_PATH)
+RESTRICTED_IDENTITY_PATH = Path(
+    RESTRICTED_CUSTOMER_IDENTITY_PATH
+)
 SECRET_KEY_ENV = "PSEUDONYMIZATION_KEY"
 SEPARATOR = "=" * 60
 SECTION_SEPARATOR = "-" * 60
@@ -67,6 +74,7 @@ class DataProtectionPipeline:
         raw_path: Path = RAW_PATH,
         config_path: Path = CONFIG_PATH,
         protected_path: Path = PROTECTED_PATH,
+        restricted_identity_path: Path = RESTRICTED_IDENTITY_PATH,
     ) -> None:
         """
         Initializes the pipeline paths.
@@ -77,6 +85,10 @@ class DataProtectionPipeline:
         self.config_path = Path(config_path)
 
         self.protected_path = Path(protected_path)
+
+        self.restricted_identity_path = Path(
+            restricted_identity_path
+        )
 
     def load_secret_key(self) -> str:
         """
@@ -171,6 +183,25 @@ class DataProtectionPipeline:
         save_dataset(
             dataframe=dataframe,
             output_path=self.protected_path,
+        )
+
+    def save_restricted_tracking(
+        self,
+        raw_dataframe: pd.DataFrame,
+        protected_dataframe: pd.DataFrame,
+        config: dict[str, Any],
+    ) -> None:
+        """Persists the restricted original-to-protected ID mapping."""
+
+        tracking_dataframe = build_restricted_tracking(
+            raw_dataframe=raw_dataframe,
+            protected_dataframe=protected_dataframe,
+            config=config,
+        )
+
+        save_dataset(
+            dataframe=tracking_dataframe,
+            output_path=self.restricted_identity_path,
         )
 
     def print_summary(
@@ -282,6 +313,12 @@ class DataProtectionPipeline:
 
         self.save(
             dataframe=protected_dataframe,
+        )
+
+        self.save_restricted_tracking(
+            raw_dataframe=dataframe,
+            protected_dataframe=protected_dataframe,
+            config=config,
         )
 
         self.print_summary(

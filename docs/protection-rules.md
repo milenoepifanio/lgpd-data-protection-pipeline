@@ -21,6 +21,16 @@ O processamento segue o fluxo:
 
 Raw Restrita → Classificação → Proteção → Protected → Validação
 
+Durante a proteção, também é gerado um mapa de rastreabilidade
+separado em `data/restricted/customer_identity_map.parquet`. Esse
+arquivo preserva os atributos originais do cliente, incluindo `nome`,
+`cpf`, `email`, `telefone`, `raca_etnia`, `condicao_saude` e
+`tipo_sanguineo`, que são removidos da camada Protected, e adiciona a coluna
+`customer_id_protected`, permitindo identificar a origem de um registro
+protegido quando houver autorização operacional. O mapa não faz parte
+da camada Protected e deve ter controle de acesso mais restritivo que os
+datasets analíticos.
+
 ### Entrada
 
 `data/raw/customers.parquet`
@@ -127,6 +137,13 @@ identificador original foi substituído.
 
 A camada Protected continua sujeita aos requisitos de proteção
 aplicáveis aos dados pessoais.
+
+### 5.5 Mapa de rastreabilidade
+
+O pipeline preserva os dados originais do cliente e a relação entre o
+identificador original e o identificador pseudonimizado em um parquet
+separado. A chave HMAC não é gravada nesse arquivo; o mapa é o artefato
+autorizado para consulta do vínculo durante a operação do processo.
 
 ---
 

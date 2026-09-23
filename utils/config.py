@@ -19,6 +19,8 @@ SILVER_DATA_DIR = DATA_DIR / "silver"
 
 ANALYTICS_DATA_DIR = DATA_DIR / "analytics"
 
+RESTRICTED_DATA_DIR = DATA_DIR / "restricted"
+
 # ============================================================
 # DATASET CONFIGURATION
 # ============================================================
@@ -45,5 +47,9 @@ PROTECTED_DATA_DIR = (
 
 PROTECTED_CUSTOMERS_PATH = (
     PROTECTED_DATA_DIR / "customers.parquet"
+)
+
+RESTRICTED_CUSTOMER_IDENTITY_PATH = (
+    RESTRICTED_DATA_DIR / "customer_identity_map.parquet"
 )
 

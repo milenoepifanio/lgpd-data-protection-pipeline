@@ -62,11 +62,13 @@ data/raw/*
 data/protected/*
 data/silver/*
 data/analytics/*
+data/restricted/*
 
 !data/raw/.gitkeep
 !data/protected/.gitkeep
 !data/silver/.gitkeep
 !data/analytics/.gitkeep
+!data/restricted/.gitkeep
 
 
 # ============================================================
