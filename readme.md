@@ -40,7 +40,7 @@ utils/        Regras e componentes reutilizáveis
 - `pip`
 - PowerShell, Terminal ou shell compatível
 
-As dependências estão em [requirements.txt](requirements.txt): pandas, PyArrow, Faker, PyYAML e python-dotenv.
+As dependências estão em [requirements.txt](requirements.txt): pandas, PyArrow, Faker, PyYAML, python-dotenv e Great Expectations.
 
 ## Instalação
 
@@ -76,12 +76,12 @@ Não versione `.env` nem compartilhe a chave. A mesma chave deve ser utilizada q
 
 ## Execução do pipeline
 
-Execute os scripts a partir da raiz do projeto, na ordem abaixo:
+Execute os módulos a partir da raiz do projeto, na ordem abaixo. O uso de `-m` mantém os imports internos do projeto funcionando corretamente:
 
 ### 1. Gerar dados sintéticos
 
 ```powershell
-python src/generate_data.py
+python -m src.generate_data
 ```
 
 Saída: `data/raw/customers.parquet`.
@@ -89,7 +89,7 @@ Saída: `data/raw/customers.parquet`.
 ### 2. Validar a classificação
 
 ```powershell
-python src/classify_data.py
+python -m src.classify_data
 ```
 
 O script verifica se todas as colunas possuem classificação, nível de proteção, necessidade analítica e ação de proteção válidos.
@@ -97,7 +97,7 @@ O script verifica se todas as colunas possuem classificação, nível de proteç
 ### 3. Aplicar a proteção
 
 ```powershell
-python src/protect_data.py
+python -m src.protect_data
 ```
 
 Saída: `data/protected/customers.parquet`.
@@ -107,7 +107,7 @@ As transformações podem incluir remoção de atributos, generalização e pseu
 ### 4. Validar a proteção
 
 ```powershell
-python src/validate_protection.py
+python -m src.validate_protection
 ```
 
 O processo compara as camadas Raw e Protected e executa as validações de qualidade configuradas.
@@ -115,7 +115,7 @@ O processo compara as camadas Raw e Protected e executa as validações de quali
 ### 5. Construir a camada Silver
 
 ```powershell
-python src/build_silver.py
+python -m src.build_silver
 ```
 
 Saída: `data/silver/customers.parquet`.
@@ -123,7 +123,7 @@ Saída: `data/silver/customers.parquet`.
 ### 6. Construir a camada Analytics
 
 ```powershell
-python src/build_analytics.py
+python -m src.build_analytics
 ```
 
 Saídas em `data/analytics/`, com agregações por estado, faixa etária, faixa de renda e canal preferido.

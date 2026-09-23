@@ -3,3 +3,4 @@ pandas
 pyarrow
 pyyaml
 python-dotenv
+great-expectations
