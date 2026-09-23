@@ -11,6 +11,7 @@ as validações automatizadas dos scripts.
 | `query_protected_validate.ipynb` | Consulta o schema e amostras da camada Protected. |
 | `trace_customer_identity.ipynb` | Relaciona o registro restrito com a Silver pelo ID protegido e valida a rastreabilidade. |
 | `view_customer_identity_map.ipynb` | Consulta exclusivamente o `customer_identity_map.parquet`. |
+| `validate_health_analytics.ipynb` | Valida e exibe os cinco produtos da Analytics por condição de saúde e dimensão complementar. |
 
 ## Execução
 

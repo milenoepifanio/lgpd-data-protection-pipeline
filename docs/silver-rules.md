@@ -17,13 +17,13 @@ O processamento não acessa diretamente a Raw e não reaplica as transformaçõe
 
 `data/protected/customers.parquet`
 
-A entrada contém 10.000 registros e 17 colunas.
+A entrada contém 10.000 registros e 18 colunas.
 
 ### Saída
 
 `data/silver/customers.parquet`
 
-A saída contém 10.000 registros e 12 colunas.
+A saída contém 10.000 registros e 13 colunas.
 
 ### Script de execução
 
@@ -46,6 +46,7 @@ A Silver mantém 11 atributos provenientes da Protected e acrescenta um atributo
 | Campo | Tipo esperado | Regra |
 |---|---|---|
 | `customer_id` | String | Preservar o identificador pseudonimizado. |
+| `condicao_saude` | String | Preservar para o recorte controlado da Analytics. |
 | `faixa_etaria` | String | Preservar. |
 | `estado` | String | Preservar. |
 | `faixa_renda` | String | Preservar. |

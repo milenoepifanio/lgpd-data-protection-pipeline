@@ -56,7 +56,13 @@ def validate_analytics_data(
             "customer_id contains duplicate values."
         )
 
-    for dimension in ANALYTICS_PRODUCTS.values():
+    dimensions = {
+        dimension
+        for product_dimensions in ANALYTICS_PRODUCTS.values()
+        for dimension in product_dimensions
+    }
+
+    for dimension in dimensions:
 
         if dataframe[dimension].isna().any():
             raise ValueError(

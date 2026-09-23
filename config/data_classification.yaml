@@ -1,7 +1,7 @@
-# ============================================================
+
 # DATA CLASSIFICATION
 # LGPD & Data Protection Pipeline
-# ============================================================
+
 
 dataset:
   name: customers
@@ -19,9 +19,7 @@ dataset:
   contains_sensitive_personal_data: true
 
 
-# ============================================================
 # CLASSIFICATION LEVELS
-# ============================================================
 
 classification_levels:
 
@@ -41,9 +39,7 @@ classification_levels:
       requiring enhanced protection.
 
 
-# ============================================================
 # PROTECTION LEVELS
-# ============================================================
 
 protection_levels:
 
@@ -62,9 +58,7 @@ protection_levels:
       strict access restrictions.
 
 
-# ============================================================
 # COLUMNS
-# ============================================================
 
 columns:
 
@@ -302,7 +296,7 @@ columns:
         ecommerce analytical use case.
 
     protection:
-      action: remove
+      action: retain
 
 
   tipo_sanguineo:

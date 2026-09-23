@@ -92,12 +92,12 @@ As ações previstas incluem:
 
 | Ação | Quantidade de atributos |
 |---|---:|
-| Preservação | 13 |
-| Remoção | 7 |
+| Preservação | 14 |
+| Remoção | 6 |
 | Generalização | 3 |
 | Pseudonimização | 1 |
 
-A camada Protected foi gerada com 10.000 registros e 17 colunas.
+A camada Protected foi gerada com 10.000 registros e 18 colunas.
 
 ### Evidência de validação
 
@@ -188,7 +188,7 @@ BUILDING SILVER LAYER
 SILVER LAYER SUCCESSFULLY BUILT
 ```
 
-**Resultado:** 10.000 registros e 12 colunas.
+**Resultado:** 10.000 registros e 13 colunas.
 
 ### 6.2 Construção da Analytics
 
@@ -196,10 +196,11 @@ A Analytics foi desenvolvida para produzir indicadores comerciais agregados a pa
 
 Atividades realizadas:
 
-- Agregação por estado;
-- Agregação por faixa etária;
-- Agregação por faixa de renda;
-- Agregação por canal preferido;
+- Filtragem da coorte de Diabetes, Hipertensão e Obesidade;
+- Agregação por condição de saúde e estado;
+- Agregação por condição de saúde e faixa etária;
+- Agregação por condição de saúde e faixa de renda;
+- Agregação por condição de saúde e canal preferido;
 - Cálculo de clientes distintos, receita, quantidade de compras e ticket médio;
 - Aplicação de limite mínimo de 10 clientes por grupo;
 - Gravação dos produtos em Parquet.
@@ -216,22 +217,25 @@ python -m src.build_analytics
 BUILDING ANALYTICS LAYER
 [PASSED] Input rows: 10000
 [INFO] Minimum group size: 10
-[PASSED] customers_by_age: 6 groups
-[PASSED] customers_by_income: 5 groups
-[PASSED] customers_by_channel: 4 groups
+[PASSED] customers_by_health_condition: 3 groups
+[PASSED] customers_by_age: 18 groups
+[PASSED] customers_by_income: 15 groups
+[PASSED] customers_by_channel: 12 groups
 ANALYTICS LAYER SUCCESSFULLY BUILT
 ```
 
-O arquivo `customers_by_state.parquet` também foi gerado e lido com sucesso, contendo 27 grupos.
+O arquivo `customers_by_state.parquet` também foi gerado e lido com sucesso,
+contendo 81 grupos organizados por condição de saúde e estado.
 
 ### 6.3 Produtos Gerados
 
 | Produto | Grupos |
 |---|---:|
-| Clientes por estado | 27 |
-| Clientes por faixa etária | 6 |
-| Clientes por faixa de renda | 5 |
-| Clientes por canal preferido | 4 |
+| Clientes por condição de saúde | 3 |
+| Clientes por condição de saúde e estado | 81 |
+| Clientes por condição de saúde e faixa etária | 18 |
+| Clientes por condição de saúde e faixa de renda | 15 |
+| Clientes por condição de saúde e canal preferido | 12 |
 
 Os produtos não disponibilizam o identificador individual de cliente.
 

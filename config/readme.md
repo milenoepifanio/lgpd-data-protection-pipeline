@@ -25,8 +25,9 @@ A política descreve:
 
 O `customer_id` é pseudonimizado com HMAC-SHA256. Identificadores diretos
 como nome, CPF, e-mail e telefone são removidos da Protected. Datas de
-nascimento, CEP e renda mensal são generalizados. Os dados sensíveis sem
-finalidade analítica são removidos da Protected.
+nascimento, CEP e renda mensal são generalizados. `condicao_saude` é
+preservada na Protected exclusivamente para a coorte analítica autorizada
+de Diabetes, Hipertensão e Obesidade; os demais dados sensíveis são removidos.
 
 O registro restrito mantém os dados originais para rastreabilidade autorizada;
 isso não altera a política de exposição da camada Protected.

@@ -12,7 +12,7 @@ versionados quando contiverem registros.
 | `restricted/` | Rastreamento restrito | Registro completo do cliente e vínculo com o ID protegido. |
 | `protected/` | Protected | Dados minimizados, generalizados e pseudonimizados. |
 | `silver/` | Silver | Dados protegidos selecionados e preparados para análise. |
-| `analytics/` | Analytics | Produtos agregados por dimensões comerciais. |
+| `analytics/` | Analytics | Produtos agregados por condição de saúde e dimensões comerciais. |
 
 ## Artefatos principais
 
@@ -23,6 +23,7 @@ data/
 ├── protected/customers.parquet
 ├── silver/customers.parquet
 └── analytics/
+	├── customers_by_health_condition.parquet
 	├── customers_by_state.parquet
 	├── customers_by_age.parquet
 	├── customers_by_income.parquet

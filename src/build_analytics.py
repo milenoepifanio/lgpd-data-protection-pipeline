@@ -4,12 +4,14 @@ Build Analytics Layer
 =====================
 
 Reads the Silver dataset and generates aggregated
-commercial analytics.
+health-focused commercial analytics for customers with
+Diabetes, Hipertensão or Obesidade.
 
 Input:
     data/silver/customers.parquet
 
 Outputs:
+    data/analytics/customers_by_health_condition.parquet
     data/analytics/customers_by_state.parquet
     data/analytics/customers_by_age.parquet
     data/analytics/customers_by_income.parquet

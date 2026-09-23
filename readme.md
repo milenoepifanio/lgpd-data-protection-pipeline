@@ -129,7 +129,9 @@ Saída: `data/silver/customers.parquet`.
 python -m src.build_analytics
 ```
 
-Saídas em `data/analytics/`, com agregações por estado, faixa etária, faixa de renda e canal preferido.
+Saídas em `data/analytics/`, com agregações da coorte de Diabetes,
+Hipertensão e Obesidade por condição de saúde, estado, faixa etária,
+faixa de renda e canal preferido.
 
 ## Testes
 

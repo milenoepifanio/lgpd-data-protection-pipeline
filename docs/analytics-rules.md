@@ -7,8 +7,10 @@ Este documento descreve as regras implementadas na camada Analytics do case de L
 
 A Analytics é responsável por disponibilizar indicadores comerciais agregados a partir da Silver, evitando a exposição desnecessária de registros individuais de clientes.
 
-A camada produz quatro produtos analíticos:
+A camada filtra a coorte de clientes com Diabetes, Hipertensão ou
+Obesidade e produz cinco produtos analíticos agregados:
 
+- Clientes por condição de saúde;
 - Clientes por estado;
 - Clientes por faixa etária;
 - Clientes por faixa de renda;
@@ -22,7 +24,11 @@ A camada produz quatro produtos analíticos:
 
 `data/silver/customers.parquet`
 
-A entrada contém 10.000 registros e 12 colunas.
+A entrada contém 10.000 registros e 13 colunas, incluindo
+`condicao_saude`.
+
+Antes das agregações, somente os registros com as condições configuradas
+em `utils/analytics/definitions.py` são considerados.
 
 ### Diretório de saída
 
@@ -32,10 +38,11 @@ A entrada contém 10.000 registros e 12 colunas.
 
 | Arquivo | Dimensão | Grupos gerados |
 |---|---|---:|
-| `customers_by_state.parquet` | `estado` | 27 |
-| `customers_by_age.parquet` | `faixa_etaria` | 6 |
-| `customers_by_income.parquet` | `faixa_renda` | 5 |
-| `customers_by_channel.parquet` | `canal_preferido` | 4 |
+| `customers_by_health_condition.parquet` | `condicao_saude` | 3 |
+| `customers_by_state.parquet` | `condicao_saude`, `estado` | 81 |
+| `customers_by_age.parquet` | `condicao_saude`, `faixa_etaria` | 18 |
+| `customers_by_income.parquet` | `condicao_saude`, `faixa_renda` | 15 |
+| `customers_by_channel.parquet` | `condicao_saude`, `canal_preferido` | 12 |
 
 ### Script de execução
 
@@ -53,9 +60,12 @@ A entrada contém 10.000 registros e 12 colunas.
 
 ## 3. Finalidade Analítica
 
-A finalidade da Analytics é produzir indicadores comerciais agregados para acompanhar características gerais da base de clientes e seu comportamento de compra.
+A finalidade da Analytics é produzir indicadores comerciais agregados para
+acompanhar características e comportamento de compra da coorte de clientes
+com Diabetes, Hipertensão ou Obesidade.
 
-Os produtos são organizados por dimensões relevantes para análise de negócio.
+Os produtos são organizados por dimensões relevantes para análise de negócio
+dentro da coorte de saúde selecionada.
 
 Os resultados não incluem o identificador individual de cliente.
 
@@ -63,7 +73,10 @@ Os resultados não incluem o identificador individual de cliente.
 
 ## 4. Contrato de Saída
 
-Cada produto contém uma dimensão de agrupamento e quatro indicadores.
+Cada produto contém a condição de saúde, quando aplicável, uma dimensão
+analítica complementar e quatro indicadores. Assim, os resultados de idade,
+renda, canal e estado permanecem separados para Diabetes, Hipertensão e
+Obesidade.
 
 | Campo | Descrição |
 |---|---|
@@ -248,13 +261,15 @@ python -m src.build_analytics
 BUILDING ANALYTICS LAYER
 [PASSED] Input rows: 10000
 [INFO] Minimum group size: 10
-[PASSED] customers_by_age: 6 groups
-[PASSED] customers_by_income: 5 groups
-[PASSED] customers_by_channel: 4 groups
+[PASSED] customers_by_health_condition: 3 groups
+[PASSED] customers_by_age: 18 groups
+[PASSED] customers_by_income: 15 groups
+[PASSED] customers_by_channel: 12 groups
 ANALYTICS LAYER SUCCESSFULLY BUILT
 ```
 
-A execução também gerou o produto `customers_by_state.parquet`, posteriormente lido com sucesso, contendo 27 grupos.
+A execução também gerou `customers_by_state.parquet`, contendo 81 grupos
+organizados por condição de saúde e estado.
 
 ---
 

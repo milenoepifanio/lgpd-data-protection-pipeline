@@ -66,7 +66,7 @@ flowchart TD
 
     D --> E["Silver<br/>data/silver/customers.parquet"]
 
-    E --> F["Analytics<br/>Quatro produtos agregados"]
+    E --> F["Analytics<br/>Cinco produtos agregados por condição de saúde"]
 
     G["Validação da Proteção<br/>Comparação + Great Expectations"] -.-> D
 ```
@@ -137,7 +137,7 @@ A Protected contém o resultado da aplicação das regras de proteção.
 Características:
 
 - 10.000 registros;
-- 17 colunas;
+- 18 colunas;
 - Ausência dos sete atributos removidos;
 - Identificador de cliente pseudonimizado;
 - Atributos selecionados generalizados.
@@ -159,7 +159,7 @@ A Silver prepara os dados protegidos para a finalidade analítica do case.
 Características:
 
 - 10.000 registros;
-- 12 colunas;
+- 13 colunas;
 - Seleção dos atributos necessários;
 - Conversão de datas;
 - Validação de regras de consistência;
@@ -181,14 +181,16 @@ As regras são detalhadas em:
 
 A Analytics disponibiliza produtos analíticos agregados, sem expor o identificador individual dos clientes.
 
-Os quatro produtos implementados são:
+Os cinco produtos implementados são calculados somente para Diabetes,
+Hipertensão e Obesidade:
 
 | Produto | Dimensão | Grupos gerados |
 |---|---|---:|
-| `customers_by_state.parquet` | Estado | 27 |
-| `customers_by_age.parquet` | Faixa etária | 6 |
-| `customers_by_income.parquet` | Faixa de renda | 5 |
-| `customers_by_channel.parquet` | Canal preferido | 4 |
+| `customers_by_health_condition.parquet` | Condição de saúde | 3 |
+| `customers_by_state.parquet` | Condição de saúde + estado | 81 |
+| `customers_by_age.parquet` | Condição de saúde + faixa etária | 18 |
+| `customers_by_income.parquet` | Condição de saúde + faixa de renda | 15 |
+| `customers_by_channel.parquet` | Condição de saúde + canal preferido | 12 |
 
 Cada produto contém:
 
@@ -364,13 +366,14 @@ O processamento verifica:
 - Ausência de valores negativos nas métricas comerciais;
 - Conversão das colunas de data.
 
-A execução registrada produziu 10.000 registros e 12 colunas.
+A execução registrada produziu 10.000 registros e 13 colunas.
 
 ### 9.3 Analytics
 
 O processamento verifica o esquema de entrada e os atributos utilizados nas agregações.
 
-Os quatro produtos foram gerados e lidos com sucesso.
+Os cinco produtos foram gerados e lidos com sucesso, sempre separados por
+condição de saúde quando combinados com outra dimensão.
 
 As saídas não incluem o identificador individual de cliente.
 

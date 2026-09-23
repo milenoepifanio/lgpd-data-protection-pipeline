@@ -9,10 +9,25 @@ Defines the analytical products and disclosure requirements.
 # ANALYTICAL PRODUCTS
 
 ANALYTICS_PRODUCTS = {
-    "customers_by_state": "estado",
-    "customers_by_age": "faixa_etaria",
-    "customers_by_income": "faixa_renda",
-    "customers_by_channel": "canal_preferido",
+    "customers_by_health_condition": [
+        "condicao_saude",
+    ],
+    "customers_by_state": [
+        "condicao_saude",
+        "estado",
+    ],
+    "customers_by_age": [
+        "condicao_saude",
+        "faixa_etaria",
+    ],
+    "customers_by_income": [
+        "condicao_saude",
+        "faixa_renda",
+    ],
+    "customers_by_channel": [
+        "condicao_saude",
+        "canal_preferido",
+    ],
 }
 
 
@@ -20,6 +35,7 @@ ANALYTICS_PRODUCTS = {
 
 REQUIRED_COLUMNS = [
     "customer_id",
+    "condicao_saude",
     "estado",
     "faixa_etaria",
     "faixa_renda",
@@ -32,6 +48,17 @@ REQUIRED_COLUMNS = [
 # DISCLOSURE POLICY
 
 MIN_GROUP_SIZE = 10
+
+
+# HEALTH ANALYTICS COHORT
+
+TARGET_HEALTH_CONDITIONS = frozenset(
+    {
+        "Diabetes",
+        "Hipertensão",
+        "Obesidade",
+    }
+)
 
 
 # ANALYTICAL METRICS

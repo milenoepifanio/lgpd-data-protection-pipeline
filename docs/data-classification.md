@@ -128,7 +128,7 @@ O dataset contém 24 atributos, distribuídos pelas seguintes ações:
 | `email` | Dado pessoal | Informação de contato desnecessária para a análise. |
 | `telefone` | Dado pessoal | Informação de contato desnecessária para a análise. |
 | `raca_etnia` | Dado pessoal sensível | Não é necessário para a finalidade do case. |
-| `condicao_saude` | Dado pessoal sensível | Não é necessário para a finalidade do case. |
+| `condicao_saude` | Dado pessoal sensível | Preservado na Protected para a coorte analítica autorizada de saúde. |
 | `tipo_sanguineo` | Dado pessoal sensível | Não é necessário para a finalidade do case. |
 
 ### 5.2 Atributo pseudonimizado

@@ -25,7 +25,8 @@ Durante a proteção, também é gerado um mapa de rastreabilidade
 separado em `data/restricted/customer_identity_map.parquet`. Esse
 arquivo preserva os atributos originais do cliente, incluindo `nome`,
 `cpf`, `email`, `telefone`, `raca_etnia`, `condicao_saude` e
-`tipo_sanguineo`, que são removidos da camada Protected, e adiciona a coluna
+`tipo_sanguineo`, que permanecem restritos, enquanto os demais são removidos
+da camada Protected, e adiciona a coluna
 `customer_id_protected`, permitindo identificar a origem de um registro
 protegido quando houver autorização operacional. O mapa não faz parte
 da camada Protected e deve ter controle de acesso mais restritivo que os
@@ -60,8 +61,8 @@ As ações configuradas são:
 
 | Ação | Quantidade de atributos |
 |---|---:|
-| Preservação | 13 |
-| Remoção | 7 |
+| Preservação | 14 |
+| Remoção | 6 |
 | Generalização | 3 |
 | Pseudonimização | 1 |
 | **Total** | **24** |
@@ -69,9 +70,9 @@ As ações configuradas são:
 Após o processamento, a camada Protected contém:
 
 - 10.000 registros;
-- 17 colunas.
+- 18 colunas.
 
-A quantidade de registros é preservada, enquanto os sete atributos
+A quantidade de registros é preservada, enquanto os seis atributos
 configurados para remoção deixam de existir na saída.
 
 Os campos generalizados substituem os atributos originais.
@@ -92,7 +93,6 @@ Os seguintes atributos são removidos:
 | `email` | Informação de contato. |
 | `telefone` | Informação de contato. |
 | `raca_etnia` | Dado pessoal sensível. |
-| `condicao_saude` | Dado pessoal sensível. |
 | `tipo_sanguineo` | Dado pessoal sensível. |
 
 Os atributos removidos não devem estar presentes no esquema da

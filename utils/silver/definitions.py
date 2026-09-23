@@ -10,6 +10,7 @@ Defines the expected schema for the Silver layer.
 
 SILVER_COLUMNS = [
     "customer_id",
+    "condicao_saude",
     "faixa_etaria",
     "estado",
     "faixa_renda",
